@@ -188,6 +188,7 @@ func NewFile(r io.ReaderAt, config ...FileConfig) (*File, error) {
 		return nil, fmt.Errorf("failed to parse command dat: %v", err)
 	}
 	f.Loads = []Load{}
+	f.LoadOffsets = []int64{}
 	bo := f.ByteOrder
 	for i := uint32(0); i < f.NCommands; i++ {
 		// Each load command begins with uint32 command and length.
@@ -201,6 +202,7 @@ func NewFile(r io.ReaderAt, config ...FileConfig) (*File, error) {
 
 		var cmddat []byte
 		cmddat, dat = dat[0:siz], dat[siz:]
+		f.LoadOffsets = append(f.LoadOffsets, offset)
 		offset += int64(siz)
 		var s *Segment
 

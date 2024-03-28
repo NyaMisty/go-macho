@@ -15,6 +15,8 @@ type FileTOC struct {
 	Loads     loads
 	Sections  []*types.Section
 	functions []types.Function
+
+	LoadOffsets []int64
 }
 
 func (t *FileTOC) AddLoad(l Load) uint32 {
