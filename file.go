@@ -193,6 +193,7 @@ func NewFile(r io.ReaderAt, config ...FileConfig) (*File, error) {
 		return nil, &FormatError{offset, "too many load commands", nil}
 	}
 	f.Loads = make([]Load, 0, c)
+	f.LoadOffsets = make([]int64, 0, c)
 	bo := f.ByteOrder
 	for i := uint32(0); i < f.NCommands; i++ {
 		// Each load command begins with uint32 command and length.
@@ -206,6 +207,7 @@ func NewFile(r io.ReaderAt, config ...FileConfig) (*File, error) {
 
 		var cmddat []byte
 		cmddat, dat = dat[0:siz], dat[siz:]
+		f.LoadOffsets = append(f.LoadOffsets, offset)
 		offset += int64(siz)
 		var s *Segment
 
